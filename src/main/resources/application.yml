@@ -1,0 +1,31 @@
+server:
+  port: ${SERVER_PORT}
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_URL}:${DB_PORT}/${DB_SCHEMA}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  servlet:
+    multipart:
+      max-request-size: 25MB
+      max-file-size: 25MB
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical_naming_strategy: me.kevin.configuration.CamelCaseToSnakeAndUpperCaseStrategy
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialec
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URL}
+
+logging:
+  level:
+    tracer: TRACE
