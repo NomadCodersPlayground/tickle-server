@@ -50,6 +50,7 @@ public class CustomElasticArticleRepositoryImpl implements CustomElasticArticleR
     public Slice<ArticleDocument> findAll(Pageable pageable, ArticleSortOption sortOption) {
         NativeQuery findAllQuery = NativeQuery.builder()
                 .withSort(getArticleDocumentSort(sortOption))
+                .withPageable(pageable)
                 .build();
 
         List<ArticleDocument> articleDocuments = elasticsearchOperations.search(findAllQuery, ArticleDocument.class)
@@ -61,7 +62,7 @@ public class CustomElasticArticleRepositoryImpl implements CustomElasticArticleR
 
     private Sort getArticleDocumentSort(ArticleSortOption sortOption) {
         if (sortOption == null) {
-            return Sort.by("createdAt").descending();
+            return Sort.by("createdDate").descending();
         }
 
         switch (sortOption) {
@@ -74,7 +75,7 @@ public class CustomElasticArticleRepositoryImpl implements CustomElasticArticleR
             case MONTHLY_VIEWS:
                 return Sort.by("monthlyViews").descending();
             default:
-                return Sort.by("createdAt").descending();
+                return Sort.by("createdDate").descending();
         }
     }
 

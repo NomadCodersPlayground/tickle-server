@@ -25,7 +25,9 @@ spring:
       dialect: org.hibernate.dialect.MySQL8InnoDBDialec
   elasticsearch:
     uris: ${ELASTICSEARCH_URL}
+    username: ${ELASTICSEARCH_USERNAME}
+    password: ${ELASTICSEARCH_PASSWORD}
 
 logging:
   level:
-    tracer: TRACE
+    root: TRACE
