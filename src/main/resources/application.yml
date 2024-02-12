@@ -30,4 +30,4 @@ spring:
 
 logging:
   level:
-    root: TRACE
+    root: INFO
