@@ -5,27 +5,6 @@ networks:
     driver: bridge
 
 services:
-  database:
-    container_name: mysql
-    image: mysql:8.0.22
-    platform: linux/amd64
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${DB_SCHEMA}
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      TZ: 'Asia/Seoul'
-    ports:
-      - ${DB_PORT}:${DB_PORT}
-    volumes:
-      - ${DB_DATA_PATH}/mysql/data:/var/lib/mysql
-    networks:
-      - tickle-network
-    command:
-      - "mysqld"
-      - "--character-set-server=utf8mb4"
-      - "--collation-server=utf8mb4_unicode_ci"
-
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.5.3
     container_name: elasticsearch
@@ -51,7 +30,7 @@ services:
     container_name: kibana
     image: docker.elastic.co/kibana/kibana:8.5.3
     environment:
-      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_URL: http://elasticsearch:${ELASTICSEARCH_PORT}
     ports:
       - ${KIBANA_PORT}:${KIBANA_PORT}
     networks:

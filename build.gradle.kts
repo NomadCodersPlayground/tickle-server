@@ -23,10 +23,7 @@ dependencies {
     annotationProcessor(libs.org.projectlombok.lombok)
     implementation(libs.commons.io.commons.io)
     implementation(libs.org.jsoup.jsoup)
-    implementation(libs.com.amazonaws.aws.java.sdk.s3)
     implementation(libs.javax.xml.bind.jaxb.api)
-    runtimeOnly(libs.com.h2database.h2)
-    runtimeOnly(libs.com.mysql.mysql.connector.j)
     testImplementation(libs.org.springframework.boot.spring.boot.starter.test)
     testImplementation(libs.org.springframework.restdocs.spring.restdocs.mockmvc)
 }
