@@ -6,8 +6,8 @@
 
 plugins {
     java
-    id("org.springframework.boot") version "3.2.1"
-    id("io.spring.dependency-management") version "1.1.4"
+    id("org.springframework.boot") version "3.1.5"
+    id("io.spring.dependency-management") version "1.1.3"
 }
 
 repositories {
@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.javax.xml.bind.jaxb.api)
     testImplementation(libs.org.springframework.boot.spring.boot.starter.test)
     testImplementation(libs.org.springframework.restdocs.spring.restdocs.mockmvc)
+    testImplementation("com.h2database:h2:2.2.224")
 }
 
 group = "com.tech-blog-finder"

@@ -1,33 +1,34 @@
 server:
   port: ${SERVER_PORT}
 
+
+elasticsearch:
+  host: ${ELASTICSEARCH_HOST}
+  username: ${ELASTICSEARCH_USERNAME}
+  password: ${ELASTICSEARCH_PASSWORD}
+
 spring:
   main:
     allow-bean-definition-overriding: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_URL}:${DB_PORT}/${DB_SCHEMA}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-  servlet:
-    multipart:
-      max-request-size: 25MB
-      max-file-size: 25MB
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
   jpa:
-    open-in-view: true
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update
-      naming:
-        physical_naming_strategy: me.kevin.configuration.CamelCaseToSnakeAndUpperCaseStrategy
+      ddl-auto: create-drop
     show-sql: true
-    properties:
-      hibernate.format_sql: true
-      dialect: org.hibernate.dialect.MySQL8InnoDBDialec
-  elasticsearch:
-    uris: ${ELASTICSEARCH_URL}
-    username: ${ELASTICSEARCH_USERNAME}
-    password: ${ELASTICSEARCH_PASSWORD}
+    format-sql: true
 
 logging:
   level:
-    root: INFO
+    org.hibernate.type.descriptor.sql: trace
