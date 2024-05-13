@@ -6,17 +6,17 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.time.Duration;
 
-public class HttpClientBuilder {
+public class HttpRequestBuilder {
 
     public static HttpClient create() {
         return HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
     }
 
-    public static HttpRequest get(String uri) throws URISyntaxException {
+    public static HttpRequest build(String uri) throws URISyntaxException {
         return HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .timeout(Duration.ofMinutes(1))
-                .header("Content-Type", "application/json")
+                .header("Content-Type", "text/html")
                 .GET()
                 .build();
     }

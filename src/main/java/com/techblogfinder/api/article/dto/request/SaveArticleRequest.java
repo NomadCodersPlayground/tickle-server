@@ -1,60 +1,41 @@
 package com.techblogfinder.api.article.dto.request;
 
-import com.opencsv.bean.CsvBindByName;
-import com.techblogfinder.api.article.domain.Article;
-import com.techblogfinder.api.article.domain.OriginArticleContent;
-import com.techblogfinder.api.article.domain.Tag;
-import com.techblogfinder.api.article.domain.WroteArticleContent;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.techblogfinder.api.article.domain.ArticleDocument;
 import com.techblogfinder.api.article.enumerable.ArticleCategory;
+import com.techblogfinder.api.common.dto.OpenGraphMetaInfo;
 import lombok.Getter;
 
-import java.util.Arrays;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 public class SaveArticleRequest {
-    @CsvBindByName(column = "Url",required = true)
-    private String uri;
-    @CsvBindByName(column = "Title", required = true)
+    private String userId;
+    private String userName;
     private String title;
-    @CsvBindByName(column = "Category", required = true)
+    private String url;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDate dueDate;
     private String category;
-    @CsvBindByName(column = "Description")
     private String description;
+    private List<String> tags;
 
-    @CsvBindByName(column = "Tag1")
-    private String tag1;
-
-    @CsvBindByName(column = "Tag2")
-    private String tag2;
-
-    @CsvBindByName(column = "Tag3")
-    private String tag3;
-
-    public Article toEntity(
-            OriginArticleContent originArticleContent,
-            WroteArticleContent wroteArticleContent,
-            String htmlContents,
-            List<Tag> tags
-    ) {
-
-        return Article.builder()
-                .uri(this.uri)
-                .originArticleContent(originArticleContent)
-                .wroteArticleContent(wroteArticleContent)
-                .htmlContents(htmlContents)
-                .category(ArticleCategory.of(this.category))
-                .description(this.description)
+    public ArticleDocument toEntity(String content, OpenGraphMetaInfo openGraphMetaInfo) {
+        return ArticleDocument.builder()
+                .userId(userId)
+                .userName(userName)
+                .title(title)
+                .url(url)
+                .dueDate(dueDate)
+                .category(ArticleCategory.of(category))
+                .description(description)
                 .tags(tags)
+                .content(content)
+                .ogTitle(openGraphMetaInfo.getTitle())
+                .ogDescription(openGraphMetaInfo.getDescription())
+                .ogImage(openGraphMetaInfo.getImageUrl())
                 .build();
-    }
-
-    public Article toFailedArticleEntity(String failedReason) {
-
-        return Article.fail(this.uri, failedReason);
-    }
-
-    public List<String> getTagNames() {
-        return Arrays.asList(tag1, tag2, tag3);
     }
 }

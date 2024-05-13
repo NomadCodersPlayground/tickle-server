@@ -1,32 +1,50 @@
 package com.techblogfinder.api.article.domain;
 
+import com.techblogfinder.api.article.enumerable.ArticleCategory;
 import com.techblogfinder.api.common.converter.ListToStringConverter;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Convert;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.springframework.data.elasticsearch.annotations.FieldType.Text;
-
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Document(indexName = "articles")
 public class ArticleDocument {
-    @Id
-    @Field(type = FieldType.Keyword)
-    private Long id;
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "title", column = @Column(name = "title")),
-            @AttributeOverride(name = "description", column = @Column(name = "description")),
-            @AttributeOverride(name = "mainImageUrl", column = @Column(name = "mainImageUrl"))
-    })
-    private OriginArticleContent originArticleContent;
+    @Id
+    @Field(name = "id", type = FieldType.Keyword)
+    private String id;
+
+    @Field(name = "user_id", type = FieldType.Keyword)
+    private String userId;
+
+    @Field(name = "user_name", type = FieldType.Keyword)
+    private String userName;
+
+    @Field(name = "title", type = FieldType.Keyword)
+    private String title;
+
+    @Field(name = "url", type = FieldType.Text)
+    private String url;
+
+    @Field(name = "due_date", type = FieldType.Date)
+    private LocalDate dueDate;
+
+    @Field(name = "category", type = FieldType.Keyword)
+    private ArticleCategory category;
+
+    @Field(name = "description", type = FieldType.Text)
+    private String description;
+
+    @Convert(converter = ListToStringConverter.class)
+    @Field(name = "tags", type = FieldType.Keyword)
+    private List<String> tags;
 
     @MultiField(
             mainField = @Field(type = FieldType.Text, analyzer = "korean_analyzer", searchAnalyzer = "korean_analyzer"),
@@ -34,48 +52,55 @@ public class ArticleDocument {
                     @InnerField(suffix = "english", type = FieldType.Text, analyzer = "standard", searchAnalyzer = "standard")
             }
     )
-    private String articleContents;
+    private String content;
 
-    private String url;
+    @MultiField(
+            mainField = @Field(type = FieldType.Text, analyzer = "korean_analyzer", searchAnalyzer = "korean_analyzer"),
+            otherFields = {
+                    @InnerField(suffix = "english", type = FieldType.Text, analyzer = "standard", searchAnalyzer = "standard")
+            }
+    )
+    private String ogTitle;
 
-    @Field(type= Text)
-    @Convert(converter = ListToStringConverter.class)
-    private List<String> tags;
+    @Field(name = "og_description", type = FieldType.Text)
+    private String ogDescription;
 
-    @Field(type = FieldType.Long)
-    private Long views;
+    @Field(name = "og_image", type = FieldType.Keyword)
+    private String ogImage;
 
-    @Field(type = FieldType.Long)
-    private Long todayViews;
+    @Field(name = "created_at", type = FieldType.Date)
+    private LocalDate createdAt;
 
-    @Field(type = FieldType.Long)
-    private Long weeklyViews;
+    @Field(name = "updated_at", type = FieldType.Date)
+    private LocalDate updatedAt;
 
-    @Field(type = FieldType.Long)
-    private Long monthlyViews;
 
-    @Field(type = FieldType.Date)
-    private LocalDate createdDate;
-
-    public static ArticleDocument of(Article article, String articleContents) {
-        return ArticleDocument.builder()
-                .id(article.getId())
-                .articleContents(articleContents)
-                .tags(article.getTagNames())
-                .originArticleContent(article.getOriginArticleContent())
-                .createdDate(LocalDate.now())
-                .url(article.getUrl())
-                .views(0L)
-                .todayViews(0L)
-                .weeklyViews(0L)
-                .monthlyViews(0L)
-                .build();
-    }
-
-    public void increaseViewCount() {
-        this.views++;
-        this.todayViews++;
-        this.weeklyViews++;
-        this.monthlyViews++;
+    @Builder
+    public ArticleDocument(
+            String userId,
+            String userName,
+            String title,
+            String url,
+            LocalDate dueDate,
+            ArticleCategory category,
+            String description,
+            List<String> tags,
+            String content,
+            String ogTitle,
+            String ogDescription,
+            String ogImage
+    ) {
+        this.userId = userId;
+        this.userName = userName;
+        this.title = title;
+        this.url = url;
+        this.dueDate = dueDate;
+        this.category = category;
+        this.description = description;
+        this.tags = tags;
+        this.content = content;
+        this.ogTitle = ogTitle;
+        this.ogDescription = ogDescription;
+        this.ogImage = ogImage;
     }
 }
