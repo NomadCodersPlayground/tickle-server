@@ -10,9 +10,8 @@ import java.util.Arrays;
 
 public class HtmlParser {
 
-    public static String  findElementValuesByTags(String html, String[] tags) {
+    public static String  findElementValuesByTags(Document doc, String[] tags) {
         StringBuilder elementsText = new StringBuilder();
-        Document doc = Jsoup.parse(html);
 
         Arrays.stream(tags).forEach(tag -> {
             Elements elements = doc.getElementsByTag(tag);
@@ -32,8 +31,7 @@ public class HtmlParser {
         return tagText.toString();
     }
 
-    public static OpenGraphMetaInfo findOpenGraphMetaInfo(String html) {
-        Document doc = Jsoup.parse(html);
+    public static OpenGraphMetaInfo findOpenGraphMetaInfo(Document doc) {
 
         String ogTitle = getMetaTagContent(doc, "og:title");
         String ogDescription = getMetaTagContent(doc, "og:description");

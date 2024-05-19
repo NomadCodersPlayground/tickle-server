@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -34,7 +35,7 @@ public class ArticleDocument {
     private String url;
 
     @Field(name = "due_date", type = FieldType.Date)
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
 
     @Field(name = "category", type = FieldType.Keyword)
     private ArticleCategory category;
@@ -81,7 +82,7 @@ public class ArticleDocument {
             String userName,
             String title,
             String url,
-            LocalDate dueDate,
+            LocalDateTime dueDate,
             ArticleCategory category,
             String description,
             List<String> tags,

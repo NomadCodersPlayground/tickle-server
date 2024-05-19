@@ -27,10 +27,19 @@ public class ArticleController {
     public ResponseEntity<String> saveAll(@RequestBody SaveArticleRequest saveArticleRequest) {
         try {
             articleService.save(saveArticleRequest);
-        } catch (URISyntaxException | IOException | InterruptedException | IllegalArgumentException e) {
+        } catch (IOException | IllegalArgumentException e) {
             articleService.fail(saveArticleRequest, e);
         }
 
         return ResponseEntity.ok("Success to save articles");
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<String> bulkSave(@RequestPart MultipartFile file) {
+        List<SaveArticleRequest> articleRequests = CSVReader.convertToModel(file, SaveArticleRequest.class);
+
+        articleService.saveAll(articleRequests);
+
+        return ResponseEntity.ok("Success to bulk save articles");
     }
 }
