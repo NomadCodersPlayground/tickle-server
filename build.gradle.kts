@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.org.springframework.boot.spring.boot.starter.data.jpa)
     implementation(libs.org.springframework.boot.spring.boot.starter.web)
     implementation(libs.org.projectlombok.lombok)
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
     annotationProcessor(libs.org.projectlombok.lombok)
     implementation(libs.commons.io.commons.io)
     implementation(libs.org.jsoup.jsoup)
