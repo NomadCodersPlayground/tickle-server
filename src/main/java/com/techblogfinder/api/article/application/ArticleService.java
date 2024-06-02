@@ -3,7 +3,9 @@ package com.techblogfinder.api.article.application;
 import com.techblogfinder.api.article.domain.ArticleDocument;
 import com.techblogfinder.api.article.infrastructure.ArticleDocumentRepository;
 import com.techblogfinder.api.article.dto.request.SaveArticleRequest;
+import com.techblogfinder.api.common.components.SlackMessageSender;
 import com.techblogfinder.api.common.dto.OpenGraphMetaInfo;
+import com.techblogfinder.api.common.model.AlarmMessage;
 import com.techblogfinder.api.common.utils.HtmlParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ArticleService {
+    private final SlackMessageSender slackMessageSender;
 
     private final ArticleDocumentRepository articleDocumentRepository;
 
@@ -78,6 +81,7 @@ public class ArticleService {
 
 
     public void fail(SaveArticleRequest saveArticleRequest, Exception e) {
-        log.error("Failed to save article: {}", saveArticleRequest.getUrl(), e);
+        log.error("Failed to save article: {}", saveArticleRequest.getUrl());
+        slackMessageSender.sendError(AlarmMessage.of(e));
     }
 }

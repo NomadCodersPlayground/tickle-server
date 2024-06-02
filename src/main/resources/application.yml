@@ -34,3 +34,6 @@ spring:
 logging:
   level:
     org.hibernate.type.descriptor.sql: trace
+
+slack:
+  webhook-url: ${SLACK_WEBHOOK_URL}
